@@ -1,0 +1,64 @@
+  // Función para verificar si dos puntos 3D se intersectan
+function intersects(p1, p2) {
+  // Calcula la distancia entre los dos puntos
+  const distance = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
+
+  // Comprueba si los puntos se superponen o están demasiado cerca
+  const minDistance = 0.1; // Establece la distancia mínima para considerar una colisión (ajústala según tus necesidades)
+  return distance < minDistance;
+}
+
+// Función para ajustar la posición de un punto 3D en caso de colisión
+function adjustCollision(point, prevPoint) {
+  // Calcula el vector de dirección desde prevPoint a point
+  const direction = {
+    x: point.x - prevPoint.x,
+    y: point.y - prevPoint.y,
+    z: point.z - prevPoint.z,
+  };
+
+  // Calcula la longitud del vector de dirección
+  const directionLength = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2) + Math.pow(direction.z, 2));
+
+  // Normaliza el vector de dirección (lo convierte en un vector unitario)
+  const normalizedDirection = {
+    x: direction.x / directionLength,
+    y: direction.y / directionLength,
+    z: direction.z / directionLength,
+  };
+
+  // Calcula el desplazamiento necesario para alejar el punto de prevPoint
+  const displacement = 0.1; // Establece la distancia de desplazamiento para evitar colisiones (ajústala según tus necesidades)
+  const displacementVector = {
+    x: normalizedDirection.x * displacement,
+    y: normalizedDirection.y * displacement,
+    z: normalizedDirection.z * displacement,
+  };
+
+  // Ajusta la posición del punto sumando el desplazamiento
+  const adjustedPosition = {
+    x: point.x + displacementVector.x,
+    y: point.y + displacementVector.y,
+    z: point.z + displacementVector.z,
+  };
+
+  return adjustedPosition;
+}
+
+
+  // Función de utilidad para interpolar entre dos puntos 3D
+  function interpolatePoint3D(p1, p2, t) {
+    if (!p1 || !p2) {
+      throw new Error('Entrada inválida: p1 o p2 no está definido');
+    }
+
+    const x = p1.x + (p2.x - p1.x) * t;
+    const y = p1.y + (p2.y - p1.y) * t;
+    const z = p1.z + (p2.z - p1.z) * t;
+    return new Point3D(x, y, z);
+  }
+
+  // Función de utilidad para pausar la ejecución durante el tiempo especificado
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
